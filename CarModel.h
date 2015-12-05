@@ -17,8 +17,6 @@ class CarModel : public QQuickItem, public QOpenGLFunctions
 public:
     CarModel();
 
-
-
 signals:
 
 public slots:
@@ -29,8 +27,8 @@ private slots:
     void paint();
 
 private:
-    QSize m_ViewPortSize;
-    QOpenGLShaderProgram *m_ShaderProgram;
+    QSize m_viewPortSize;
+    QOpenGLShaderProgram *m_shaderProgram;
 
     void createShaderProgram();
 };

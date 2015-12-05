@@ -26,16 +26,16 @@ void CarModel::handleWindowChanged(QQuickWindow *window)
 void CarModel::sync()
 {
     QSize size(100,100);
-    m_ViewPortSize = size * window()->devicePixelRatio();
+    m_viewPortSize = size * window()->devicePixelRatio();
 }
 
 void CarModel::paint()
 {
     createShaderProgram();
 
-    m_ShaderProgram->bind();
+    m_shaderProgram->bind();
 
-    m_ShaderProgram->enableAttributeArray(0);
+    m_shaderProgram->enableAttributeArray(0);
 
     float values[] = {
         -1, -1,
@@ -43,10 +43,10 @@ void CarModel::paint()
         -1, 1,
         1, 1
     };
-    m_ShaderProgram->setAttributeArray(0, GL_FLOAT, values, 2);
-    m_ShaderProgram->setUniformValue("t", (float) 1);
+    m_shaderProgram->setAttributeArray(0, GL_FLOAT, values, 2);
+    m_shaderProgram->setUniformValue("t", (float) 1);
 
-    glViewport(30, 30, m_ViewPortSize.width(), m_ViewPortSize.height());
+    glViewport(30, 30, m_viewPortSize.width(), m_viewPortSize.height());
 
     glDisable(GL_DEPTH_TEST);
 
@@ -58,21 +58,21 @@ void CarModel::paint()
 
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
-    m_ShaderProgram->disableAttributeArray(0);
-    m_ShaderProgram->release();
+    m_shaderProgram->disableAttributeArray(0);
+    m_shaderProgram->release();
 }
 
 void CarModel::createShaderProgram()
 {
-    if (!m_ShaderProgram) {
+    if (!m_shaderProgram) {
         // PGB TBD: This function should be initialized appart.
         initializeOpenGLFunctions();
 
-        m_ShaderProgram = new QOpenGLShaderProgram();
-        m_ShaderProgram->addShaderFromSourceFile(QOpenGLShader::Vertex, ":VertexShaders/Normal.vert");
-        m_ShaderProgram->addShaderFromSourceFile(QOpenGLShader::Fragment, ":FragmentShaders/Normal.frag");
+        m_shaderProgram = new QOpenGLShaderProgram();
+        m_shaderProgram->addShaderFromSourceFile(QOpenGLShader::Vertex, ":VertexShaders/Normal.vert");
+        m_shaderProgram->addShaderFromSourceFile(QOpenGLShader::Fragment, ":FragmentShaders/Normal.frag");
 
-        m_ShaderProgram->bindAttributeLocation("vertices", 0);
-        m_ShaderProgram->link();
+        m_shaderProgram->bindAttributeLocation("vertices", 0);
+        m_shaderProgram->link();
     }
 }
