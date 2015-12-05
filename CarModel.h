@@ -1,5 +1,11 @@
-#ifndef CARMODEL_H
-#define CARMODEL_H
+/**************************************************************
+ * Author:      Paul Gallegos
+ * Date:        12/05/15
+ * Comments:
+***************************************************************/
+
+#ifndef CAR_MODEL_H
+#define CAR_MODEL_H
 
 #include <QQuickItem>
 #include <QOpenGLFunctions>
@@ -10,6 +16,8 @@ class CarModel : public QQuickItem, public QOpenGLFunctions
     Q_OBJECT
 public:
     CarModel();
+
+
 
 signals:
 
@@ -23,6 +31,8 @@ private slots:
 private:
     QSize m_ViewPortSize;
     QOpenGLShaderProgram *m_ShaderProgram;
+
+    void createShaderProgram();
 };
 
-#endif // CARMODEL_H
+#endif // CAR_MODEL_H

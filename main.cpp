@@ -1,3 +1,9 @@
+/**************************************************************
+ * Author:      Paul Gallegos
+ * Date:        12/05/15
+ * Comments:
+***************************************************************/
+
 #include "CarModel.h"
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>

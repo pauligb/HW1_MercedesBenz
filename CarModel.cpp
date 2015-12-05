@@ -1,3 +1,9 @@
+/**************************************************************
+ * Author:      Paul Gallegos
+ * Date:        12/05/15
+ * Comments:
+***************************************************************/
+
 #include "CarModel.h"
 #include <QQuickWindow>
 
@@ -10,7 +16,7 @@ void CarModel::handleWindowChanged(QQuickWindow *window)
 {
     if (window) {
         connect(window, SIGNAL(beforeSynchronizing()), this, SLOT(sync()), Qt::DirectConnection);
-
+        connect(window, SIGNAL(beforeRendering()), this, SLOT(paint()), Qt::DirectConnection);
         // I am not sure if I do need this function right now, but I will leave in case later I need it
         //connect(window, SIGNAL(sceneGraphInvalidated()), this, SLOT(cleanup()), Qt::DirectConnection);
         window->setClearBeforeRendering(false);
@@ -19,39 +25,13 @@ void CarModel::handleWindowChanged(QQuickWindow *window)
 
 void CarModel::sync()
 {
-    connect(window(), SIGNAL(beforeRendering()), this, SLOT(paint()), Qt::DirectConnection);
-
     QSize size(100,100);
     m_ViewPortSize = size * window()->devicePixelRatio();
 }
 
 void CarModel::paint()
 {
-    if (!m_ShaderProgram) {
-        initializeOpenGLFunctions();
-
-        m_ShaderProgram = new QOpenGLShaderProgram();
-        m_ShaderProgram->addShaderFromSourceCode(QOpenGLShader::Vertex,
-                                           "attribute highp vec4 vertices;"
-                                           "varying highp vec2 coords;"
-                                           "void main() {"
-                                           "    gl_Position = vertices;"
-                                           "    coords = vertices.xy;"
-                                           "}");
-        m_ShaderProgram->addShaderFromSourceCode(QOpenGLShader::Fragment,
-                                           "uniform lowp float t;"
-                                           "varying highp vec2 coords;"
-                                           "void main() {"
-                                           "    lowp float i = 1. - (pow(abs(coords.x), 4.) + pow(abs(coords.y), 4.));"
-                                           "    i = smoothstep(t - 0.8, t + 0.8, i);"
-                                           "    i = floor(i * 20.) / 20.;"
-                                           "    gl_FragColor = vec4(coords * .5 + .5, i, i);"
-                                           "}");
-
-        m_ShaderProgram->bindAttributeLocation("vertices", 0);
-        m_ShaderProgram->link();
-
-    }
+    createShaderProgram();
 
     m_ShaderProgram->bind();
 
@@ -80,4 +60,19 @@ void CarModel::paint()
 
     m_ShaderProgram->disableAttributeArray(0);
     m_ShaderProgram->release();
+}
+
+void CarModel::createShaderProgram()
+{
+    if (!m_ShaderProgram) {
+        // PGB TBD: This function should be initialized appart.
+        initializeOpenGLFunctions();
+
+        m_ShaderProgram = new QOpenGLShaderProgram();
+        m_ShaderProgram->addShaderFromSourceFile(QOpenGLShader::Vertex, ":VertexShaders/Normal.vert");
+        m_ShaderProgram->addShaderFromSourceFile(QOpenGLShader::Fragment, ":FragmentShaders/Normal.frag");
+
+        m_ShaderProgram->bindAttributeLocation("vertices", 0);
+        m_ShaderProgram->link();
+    }
 }
