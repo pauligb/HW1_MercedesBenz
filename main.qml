@@ -4,10 +4,13 @@ import OpenGLUnderQML 1.0
 
 Window {
     visible: true
-    width: 360
-    height: 360
+    width: 600
+    height: 600
 
     CarModel{
-
+        x:250
+        y: 150
+        width: 100
+        height: 100
     }
 }

@@ -1,5 +1,5 @@
 /**************************************************************
- * Author:      Paul Gallegos
+ * Author:      Paul Gallegos  (PGB)
  * Date:        12/05/15
  * Comments:
 ***************************************************************/
@@ -27,10 +27,16 @@ private slots:
     void paint();
 
 private:
+    // The next members are for the Scene
     QSize m_viewPortSize;
+    QPointF m_viewPortPosition;
+    bool m_isInitialized;
+
+    // The next members are for the Car Model
     QOpenGLShaderProgram *m_shaderProgram;
 
     void createShaderProgram();
+
 };
 
 #endif // CAR_MODEL_H
