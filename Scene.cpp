@@ -17,7 +17,7 @@ void Scene::handleWindowChanged(QQuickWindow *window)
 {
     if (window) {
         connect(window, SIGNAL(beforeSynchronizing()), this, SLOT(sync()), Qt::DirectConnection);
-        connect(window, SIGNAL(beforeRendering()), this, SLOT(drawAllObjects()), Qt::DirectConnection);
+        connect(window, SIGNAL(afterRendering()), this, SLOT(drawAllObjects()), Qt::DirectConnection);
         window->setClearBeforeRendering(false);
 
         // I am not sure if I do need this function right now, but I will leave in case later I need it
@@ -32,30 +32,33 @@ void Scene::sync()
         m_isInitialized = true;
     }
 
-    m_viewPortPosition.setX(this->position().x());
-    m_viewPortPosition.setY(window()->height() - this->position().y());
+    m_viewPortPosition.setX(this->position().x() * window()->devicePixelRatio());
+    m_viewPortPosition.setY(window()->height() - this->height() - this->position().y());
+    m_viewPortPosition.setY(m_viewPortPosition.y() * window()->devicePixelRatio());
 
     QSize size(this->width(), this->height());
     m_viewPortSize = size * window()->devicePixelRatio();
 
     m_carModel.createShaderProgram();
-    qDebug()<<"creting Shader Program";
+    qDebug()<<"creating Shader Program";
 }
 
 
 void Scene::drawAllObjects()
 {
-    if(m_isInitialized)
-    {
-        glViewport(m_viewPortPosition.x(), m_viewPortPosition.y(), m_viewPortSize.width(), m_viewPortSize.height());
+   glViewport(m_viewPortPosition.x(), m_viewPortPosition.y(), m_viewPortSize.width(), m_viewPortSize.height());
 
-        glDisable(GL_DEPTH_TEST);
-        glClearColor(0, 0, 0, 1);
-        glClear(GL_COLOR_BUFFER_BIT);
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+   glEnable(GL_SCISSOR_TEST);
+   glScissor(m_viewPortPosition.x(), m_viewPortPosition.y(), m_viewPortSize.width(), m_viewPortSize.height());
 
-        // Draw all the objects
-        m_carModel.draw();
-    }
+   glDisable(GL_DEPTH_TEST);
+   glClearColor(0, 0, 0, 1);
+   glClear(GL_COLOR_BUFFER_BIT);
+   glEnable(GL_BLEND);
+   glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+
+   // Draw all the objects
+   m_carModel.draw();
+
+   glDisable(GL_SCISSOR_TEST);
 }

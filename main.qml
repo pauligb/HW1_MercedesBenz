@@ -7,6 +7,11 @@ Window {
     width: 600
     height: 600
 
+    Rectangle{
+        anchors.fill: parent
+        color: "yellow"
+    }
+
     Scene{
         x:250
         y: 150
