@@ -7,7 +7,7 @@ Window {
     width: 600
     height: 600
 
-    CarModel{
+    Scene{
         x:250
         y: 150
         width: 100

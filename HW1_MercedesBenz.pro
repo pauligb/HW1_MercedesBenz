@@ -3,7 +3,8 @@ TEMPLATE = app
 QT += qml quick
 
 SOURCES += main.cpp \
-    CarModel.cpp
+    CarModel.cpp \
+    Scene.cpp
 
 RESOURCES += qml.qrc \
     assets/Shaders/shaders.qrc
@@ -15,4 +16,5 @@ QML_IMPORT_PATH =
 include(deployment.pri)
 
 HEADERS += \
-    CarModel.h
+    CarModel.h \
+    Scene.h
