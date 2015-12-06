@@ -33,7 +33,7 @@ void Scene::sync()
     }
 
     m_viewPortPosition.setX(this->position().x());
-    m_viewPortPosition.setY(this->position().y());
+    m_viewPortPosition.setY(window()->height() - this->position().y());
 
     QSize size(this->width(), this->height());
     m_viewPortSize = size * window()->devicePixelRatio();
