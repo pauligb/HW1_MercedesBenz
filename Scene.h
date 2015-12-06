@@ -11,7 +11,6 @@
 #include <QQuickItem>
 #include <QOpenGLFunctions>
 
-
 class Scene : public QQuickItem, public QOpenGLFunctions
 {
     Q_OBJECT

@@ -56,6 +56,6 @@ void Scene::drawAllObjects()
         glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
         // Draw all the objects
-        m_carModel.paint();
+        m_carModel.draw();
     }
 }

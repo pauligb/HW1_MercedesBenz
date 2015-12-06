@@ -7,21 +7,48 @@
 #ifndef CAR_MODEL_H
 #define CAR_MODEL_H
 
-#include <QOpenGLFunctions>
+#include "Model3DInterface.h"
 #include <QOpenGLShaderProgram>
+#include <QOpenGLBuffer>
 
-class CarModel : public QObject
+class CarModel : public Model3DInterface
 {
     Q_OBJECT
 public:
     CarModel();
-    void createShaderProgram();
+    // PGB TODO: This function will be changed to setShaderProgram.
+    virtual void createShaderProgram();
 
-public slots:
-    virtual void paint();
+    virtual void loadModel(const QString& path);
+
+    // The angle must be in radians.
+    virtual void rotateX(double angle);
+    // The angle must be in radians.
+    virtual void rotateY(double angle);
+    // The angle must be in radians.
+    virtual void rotateZ(double angle);
+
+    virtual void moveX(double distance);
+    virtual void moveY(double distance);
+    virtual void moveZ(double distance);
+
+    virtual void draw();
 
 private:
     QOpenGLShaderProgram *m_shaderProgram;
+    QOpenGLBuffer m_vertexBuffer;
+    QOpenGLBuffer m_normalBuffer;
+    QOpenGLBuffer m_indexBuffer;
+    unsigned int  m_indexSize;
+
+    QVector3D m_rotationAxis;
+    QPoint m_positionDistance;
+
+    QMatrix4x4  m_projectionMatrix;
+    QQuaternion m_rotation;
+
+    // This function calculates the transformation Matrix before the object is drawn.
+    virtual void createTransformationMatrix();
 };
 
 #endif // CAR_MODEL_H

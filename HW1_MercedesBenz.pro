@@ -17,4 +17,5 @@ include(deployment.pri)
 
 HEADERS += \
     CarModel.h \
-    Scene.h
+    Scene.h \
+    Model3DInterface.h

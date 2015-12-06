@@ -23,7 +23,42 @@ void CarModel::createShaderProgram()
     }
 }
 
-void CarModel::paint()
+void CarModel::loadModel(const QString& /*path*/)
+{
+
+}
+
+void CarModel::rotateX(double /*angle*/)
+{
+
+}
+
+void CarModel::rotateY(double /*angle*/)
+{
+
+}
+
+void CarModel::rotateZ(double /*angle*/)
+{
+
+}
+
+void CarModel::moveX(double /*distance*/)
+{
+
+}
+
+void CarModel::moveY(double /*distance*/)
+{
+
+}
+
+void CarModel::moveZ(double /*distance*/)
+{
+
+}
+
+void CarModel::draw()
 {
     m_shaderProgram->bind();
 
@@ -42,4 +77,9 @@ void CarModel::paint()
 
     m_shaderProgram->disableAttributeArray(0);
     m_shaderProgram->release();
+}
+
+void CarModel::createTransformationMatrix()
+{
+    // This function can calculate the complete transformation matrix from rotation and translation matrices, or directly from the final rotation or translation
 }
