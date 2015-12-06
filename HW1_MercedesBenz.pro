@@ -7,7 +7,8 @@ SOURCES += main.cpp \
     Scene.cpp
 
 RESOURCES += qml.qrc \
-    assets/Shaders/shaders.qrc
+    assets/Shaders/shaders.qrc  \
+    assets/images.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =

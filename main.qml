@@ -9,13 +9,39 @@ Window {
 
     Rectangle{
         anchors.fill: parent
-        color: "yellow"
+        color: "black"
     }
 
     Scene{
-        x:250
-        y: 150
-        width: 100
-        height: 100
+        width: parent.width
+        height: width / 2
+        anchors.centerIn: parent
+
+    }
+
+    ColorsPalette{
+        height: parent.width / 10
+        width: parent.width
+    }
+
+    Image{
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+
+        width: parent.width / 10
+        height: width
+        anchors.margins: width / 6
+        source: "images/btnRightArrow.png";
+        mirror: true
+    }
+
+    Image{
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+
+        width: parent.width / 10
+        height: width
+        anchors.margins: width / 6
+        source: "images/btnRightArrow.png";
     }
 }

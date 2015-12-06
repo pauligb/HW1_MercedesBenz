@@ -29,6 +29,7 @@ void Scene::sync()
 {
     if (!m_isInitialized) {
         initializeOpenGLFunctions();
+        m_carModel.createShaderProgram();
         m_isInitialized = true;
     }
 
@@ -39,8 +40,7 @@ void Scene::sync()
     QSize size(this->width(), this->height());
     m_viewPortSize = size * window()->devicePixelRatio();
 
-    m_carModel.createShaderProgram();
-    qDebug()<<"creating Shader Program";
+    qDebug()<<"sync";
 }
 
 

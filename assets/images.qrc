@@ -1,2 +1,5 @@
-<RCC/>
-
+<RCC>
+    <qresource prefix="/">
+        <file>images/btnRightArrow.png</file>
+    </qresource>
+</RCC>
