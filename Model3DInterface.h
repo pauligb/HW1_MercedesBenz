@@ -29,7 +29,9 @@ public:
     virtual void moveY(double distance) = 0;
     virtual void moveZ(double distance) = 0;
 
-    virtual void draw() = 0;
+    virtual void initGeometry() = 0;
+    virtual void initTextures() = 0;
+    virtual void drawGeometry(QMatrix4x4 projectionMatrix) = 0;
 
 private:
     // This function calculates the transformation Matrix before the object is drawn.

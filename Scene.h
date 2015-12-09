@@ -30,6 +30,7 @@ private:
     bool m_isInitialized;
     QSize m_viewPortSize;
     QPointF m_viewPortPosition;
+    QMatrix4x4  m_projectionMatrix;
 
     CarModel m_carModel;
 };

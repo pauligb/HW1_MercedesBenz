@@ -1,9 +1,17 @@
-uniform lowp float t;
-varying highp vec2 coords;
+#ifdef GL_ES
+// Set default precision to medium
+precision mediump int;
+precision mediump float;
+#endif
 
-void main() {
-    lowp float i = 1. - (pow(abs(coords.x), 4.) + pow(abs(coords.y), 4.));
-    i = smoothstep(t - 0.8, t + 0.8, i);
-    i = floor(i * 20.) / 20.;
-    gl_FragColor = vec4(coords * .5 + .5, i, i);
+uniform sampler2D texture;
+
+varying vec2 v_texcoord;
+
+//! [0]
+void main()
+{
+    // Set fragment color from texture
+    gl_FragColor = texture2D(texture, v_texcoord);
 }
+//! [0]

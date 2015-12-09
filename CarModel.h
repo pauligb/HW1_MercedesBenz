@@ -10,12 +10,14 @@
 #include "Model3DInterface.h"
 #include <QOpenGLShaderProgram>
 #include <QOpenGLBuffer>
+#include <QOpenGLTexture>
 
 class CarModel : public Model3DInterface
 {
     Q_OBJECT
 public:
     CarModel();
+    ~CarModel();
     // PGB TODO: This function will be changed to setShaderProgram.
     virtual void createShaderProgram();
 
@@ -32,11 +34,16 @@ public:
     virtual void moveY(double distance);
     virtual void moveZ(double distance);
 
-    virtual void draw();
+    virtual void initGeometry();
+    virtual void initTextures();
+    virtual void drawGeometry(QMatrix4x4 projectionMatrix);
 
 private:
     QOpenGLShaderProgram *m_shaderProgram;
-    QOpenGLBuffer m_vertexBuffer;
+    QOpenGLTexture *m_texture;
+
+    QOpenGLBuffer m_verticesBuffer;
+    QOpenGLBuffer m_uiBuffer;
     QOpenGLBuffer m_normalBuffer;
     QOpenGLBuffer m_indexBuffer;
     unsigned int  m_indexSize;

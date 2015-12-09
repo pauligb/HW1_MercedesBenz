@@ -4,18 +4,19 @@ import OpenGLUnderQML 1.0
 
 Window {
     visible: true
-    width: 600
-    height: 600
+    width: 640
+    height: 480
 
     Rectangle{
         anchors.fill: parent
-        color: "black"
+        color: "white"
     }
 
     Scene{
+        x:0
+        y:0
         width: parent.width
-        height: width / 2
-        anchors.centerIn: parent
+        height: parent.height
 
     }
 

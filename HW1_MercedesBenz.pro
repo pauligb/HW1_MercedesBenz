@@ -7,6 +7,7 @@ SOURCES += main.cpp \
     Scene.cpp
 
 RESOURCES += qml.qrc \
+    assets/textures.qrc  \
     assets/Shaders/shaders.qrc  \
     assets/images.qrc
 
