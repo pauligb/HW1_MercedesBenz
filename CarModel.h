@@ -53,7 +53,7 @@ private:
     QOpenGLTexture *m_texture;
 
     QOpenGLBuffer m_verticesBuffer;
-    QOpenGLBuffer m_uiBuffer;
+    QOpenGLBuffer m_uvBuffer;
     QOpenGLBuffer m_normalBuffer;
     QOpenGLBuffer m_indexBuffer;
     unsigned int  m_indexSize;

@@ -68,17 +68,14 @@ void Scene::sync()
     // Calculate aspect ratio
     qreal aspect = qreal(m_viewPortSize.width()) / qreal(m_viewPortSize.height() ? m_viewPortSize.height() : 1);
     // Set near plane to 3.0, far plane to 7.0, field of view 45 degrees
-    const qreal zNear = 3.0, zFar = 7.0, fov = 45.0;
+    const qreal zNear = 1.0, zFar = 50.0, fov = 60.0;
+
     // Reset projection
     m_projectionMatrix.setToIdentity();
     // Set perspective projection
     m_projectionMatrix.perspective(fov, aspect, zNear, zFar);
 
     glClearColor(0, 0, 0, 1);
-    // Enable depth buffer
-    glEnable(GL_DEPTH_TEST);
-    // Enable back face culling
-    glEnable(GL_CULL_FACE);
 }
 
 void Scene::initializeModels()
@@ -86,9 +83,11 @@ void Scene::initializeModels()
     m_carModel.initGeometry();
     m_carModel.initTextures();
     m_carModel.createShaderProgram();
-    m_carModel.moveZ(-5.0);
+    m_carModel.moveZ(-5);
+//    m_carModel.moveY(-1);
     m_carModel.rotateX(20);
-    m_carModel.rotateY(45);
+//    m_carModel.rotateY(60);
+//    m_carModel.rotateZ(60);
 }
 
 void Scene::operateModels()
@@ -99,8 +98,12 @@ void Scene::operateModels()
 void Scene::drawAllObjects()
 {
     glViewport(m_viewPortPosition.x(), m_viewPortPosition.y(), m_viewPortSize.width(), m_viewPortSize.height());
-    glEnable(GL_SCISSOR_TEST);
+//    glEnable(GL_SCISSOR_TEST);
     glClearColor(0, 0, 0, 1);
+    // Enable depth buffer
+    glEnable(GL_DEPTH_TEST);
+    // Enable back face culling
+    glEnable(GL_CULL_FACE);
     glScissor(m_viewPortPosition.x(), m_viewPortPosition.y(), m_viewPortSize.width(), m_viewPortSize.height());
     // Clear color and depth buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -109,5 +112,5 @@ void Scene::drawAllObjects()
         // Draw all models inside the Scene.
         m_carModel.drawGeometry(m_projectionMatrix);
     }
-    glDisable(GL_SCISSOR_TEST);
+//    glDisable(GL_SCISSOR_TEST);
 }

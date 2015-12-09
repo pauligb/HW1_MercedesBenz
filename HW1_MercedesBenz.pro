@@ -3,10 +3,12 @@ TEMPLATE = app
 QT += qml quick
 
 SOURCES += main.cpp \
+    ModelLoader.cpp \
     CarModel.cpp \
     Scene.cpp
 
 RESOURCES += qml.qrc \
+    assets/models.qrc  \
     assets/textures.qrc  \
     assets/Shaders/shaders.qrc  \
     assets/images.qrc
@@ -18,6 +20,7 @@ QML_IMPORT_PATH =
 include(deployment.pri)
 
 HEADERS += \
+    ModelLoader.h \
     CarModel.h \
     Scene.h \
     Model3DInterface.h

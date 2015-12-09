@@ -1,5 +1,8 @@
 <RCC>
     <qresource prefix="/">
         <file>Textures/cube.png</file>
+        <file>Textures/betty_color.tga</file>
+        <file>Textures/sarah_color.tga</file>
+        <file>Textures/Bus.tga</file>
     </qresource>
 </RCC>

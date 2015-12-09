@@ -15,8 +15,8 @@ Window {
     Scene{
         id: openglScene
         width: parent.width
-        height: width / 2
-        anchors.centerIn: parent
+        height: parent.height
+//        anchors.centerIn: parent
     }
 
     ColorsPalette{
