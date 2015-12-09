@@ -19,23 +19,33 @@ public:
     CarModel();
     ~CarModel();
     // PGB TODO: This function will be changed to setShaderProgram.
-    virtual void createShaderProgram();
+
 
     virtual void loadModel(const QString& path);
 
-    // The angle must be in radians.
+    // The angle must be in degrees.
     virtual void rotateX(double angle);
-    // The angle must be in radians.
+    // The angle must be in degrees.
     virtual void rotateY(double angle);
-    // The angle must be in radians.
+    // The angle must be in degrees.
     virtual void rotateZ(double angle);
 
     virtual void moveX(double distance);
     virtual void moveY(double distance);
     virtual void moveZ(double distance);
 
+    // This function creates the geometry of the model,
+    // it must be called after creating OpenGL context and before drawing.
     virtual void initGeometry();
+
+    // This function creates the geometry of the model,
+    // it must be called after creating OpenGL context and before drawing.
     virtual void initTextures();
+
+    // This function creates the geometry of the model,
+    // it must be called after creating OpenGL context and before drawing.
+    virtual void createShaderProgram();
+
     virtual void drawGeometry(QMatrix4x4 projectionMatrix);
 
 private:
@@ -48,14 +58,16 @@ private:
     QOpenGLBuffer m_indexBuffer;
     unsigned int  m_indexSize;
 
-    QVector3D m_rotationAxis;
-    QPoint m_positionDistance;
+    // The next variable contains the position Distance in the space.
+    QVector3D m_positionDistance;
+    // The next variable contains the rotation angle in x, y and z.
+    QVector3D m_rotationAngle;
 
-    QMatrix4x4  m_projectionMatrix;
+    // The next variable is the rotation Quaternion.
     QQuaternion m_rotation;
 
-    // This function calculates the transformation Matrix before the object is drawn.
-    virtual void createTransformationMatrix();
+    // The next variable is used localy to rotate the object (Perhaps will be removed).
+    QVector3D m_rotationAxis;
 };
 
 #endif // CAR_MODEL_H

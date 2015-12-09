@@ -13,11 +13,10 @@ Window {
     }
 
     Scene{
-        x:0
-        y:0
+        id: openglScene
         width: parent.width
-        height: parent.height
-
+        height: width / 2
+        anchors.centerIn: parent
     }
 
     ColorsPalette{

@@ -166,47 +166,46 @@ void CarModel::loadModel(const QString& /*path*/)
 
 }
 
-void CarModel::rotateX(double /*angle*/)
+void CarModel::rotateX(double angle)
 {
-
+    m_rotation = QQuaternion::fromAxisAndAngle(1, 0, 0, angle) * m_rotation;
 }
 
-void CarModel::rotateY(double /*angle*/)
+void CarModel::rotateY(double angle)
 {
-
+    m_rotation = QQuaternion::fromAxisAndAngle(0, 1, 0, angle) * m_rotation;
 }
 
-void CarModel::rotateZ(double /*angle*/)
+void CarModel::rotateZ(double angle)
 {
-
+    m_rotation = QQuaternion::fromAxisAndAngle(0, 0, 1, angle) * m_rotation;
 }
 
-void CarModel::moveX(double /*distance*/)
+void CarModel::moveX(double distance)
 {
-
+    m_positionDistance.setX(m_positionDistance.x() + distance);
 }
 
-void CarModel::moveY(double /*distance*/)
+void CarModel::moveY(double distance)
 {
-
+    m_positionDistance.setY(m_positionDistance.y() + distance);
 }
 
-void CarModel::moveZ(double /*distance*/)
+void CarModel::moveZ(double distance)
 {
-
+    m_positionDistance.setZ(m_positionDistance.z() + distance);
 }
 
 void CarModel::drawGeometry(QMatrix4x4  projectionMatrix)
 {
     m_shaderProgram->bind();
+
     // Calculate model view transformation
     QMatrix4x4 matrix;
-    matrix.translate(0.0, 0.0, -5.0);
-    QQuaternion rotation;
-    matrix.rotate(rotation);
+    matrix.translate(m_positionDistance);
+    matrix.rotate(m_rotation);
 
     // Set modelview-projection matrix
-    qDebug()<<"projectionMatrix * matrix"<<projectionMatrix * matrix;
     m_shaderProgram->setUniformValue("mvp_matrix", projectionMatrix * matrix);
 
     m_texture->bind();
@@ -226,9 +225,6 @@ void CarModel::drawGeometry(QMatrix4x4  projectionMatrix)
     m_shaderProgram->enableAttributeArray(vertexLocation);
     m_shaderProgram->setAttributeBuffer(vertexLocation, GL_FLOAT, offset, 3, sizeof(QVector3D));
 
-    // Offset for texture coordinate
-//    offset += sizeof(QVector3D);
-
     m_uiBuffer.bind();
     // Tell OpenGL programmable pipeline how to locate vertex texture coordinate data
     int texcoordLocation = m_shaderProgram->attributeLocation("a_texcoord");
@@ -236,13 +232,5 @@ void CarModel::drawGeometry(QMatrix4x4  projectionMatrix)
     m_shaderProgram->setAttributeBuffer(texcoordLocation, GL_FLOAT, offset, 2, sizeof(QVector2D));
 
     // Draw cube geometry using indices from VBO 1
-    qDebug()<<m_verticesBuffer.size();
-    qDebug()<<m_indexBuffer.size();
-    qDebug()<<m_uiBuffer.size();
-    glDrawElements(GL_TRIANGLE_STRIP, 34, GL_UNSIGNED_SHORT, 0);
-}
-
-void CarModel::createTransformationMatrix()
-{
-    // This function can calculate the complete transformation matrix from rotation and translation matrices, or directly from the final rotation or translation
+    glDrawElements(GL_TRIANGLE_STRIP, m_indexBuffer.size()/sizeof(GLushort), GL_UNSIGNED_SHORT, 0);
 }
