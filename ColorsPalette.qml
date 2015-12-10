@@ -2,7 +2,7 @@ import QtQuick 2.0
 
 Item {
     id: colorsPalette
-    // The selected color functionality should be handled in a ColorsPaletteModel class
+    // PGB TODO: The selected color functionality should be handled in a ColorsPaletteModel class
     property int selectedColor: 0 // This means red
     property int numberOfColors: 3;
     property int coloritemHeight: height
@@ -11,7 +11,7 @@ Item {
 
     ListModel {
         id: myModel
-        // The index values should be changed to Enum values.
+        // PGB TODO: The index values should be changed to Enum values.
         ListElement { colorName: "red";     colorIndex: 0 }
         ListElement { colorName: "green";   colorIndex: 1 }
         ListElement { colorName: "blue";    colorIndex: 2 }
@@ -27,7 +27,8 @@ Item {
                 width: height
                 anchors.centerIn: parent
                 radius: width / 2
-                color: (index == selectedColor) ? "white" : "black";
+                // PGB Note - TODO: For now it works because the color index is the same as the Repeater index. ColorsPalette class must be created.
+                color: (colorIndex == selectedColor) ? "white" : "black";
                 Rectangle {
                     id: colorObj
                     height: parent.height * 9 / 10
@@ -40,6 +41,7 @@ Item {
                     anchors.fill: colorObj
                     onClicked: {
                         sgn_selectedColorChanged(colorObj.color);
+                        // PGB TODO: Instead of the Repeater index, the ColorsPaleete colorIndex should be emitted
                         selectedColor = index;
                     }
                 }
