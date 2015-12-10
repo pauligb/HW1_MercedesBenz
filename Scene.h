@@ -42,12 +42,21 @@ private:
     virtual void mouseReleaseEvent(QMouseEvent* event);
 
     bool m_isInitialized;
+    // This variable is added to know when update the model and when not
+    // It must be set to true if the scene wants to be updated
+    bool m_needToUpdate;
     QSize m_viewPortSize;
     QPointF m_viewPortPosition;
     QMatrix4x4  m_projectionMatrix;
     QBasicTimer m_BasicTimer;
 
     CarModel m_carModel;
+
+    // This is only added to animate the car for now. It should be in a controller class.
+    QVector2D m_mousePressPosition;
+    QVector3D m_rotationAxis;
+    qreal m_angularSpeed;
+    QQuaternion m_rotation;
 };
 
 #endif // SCENE_H

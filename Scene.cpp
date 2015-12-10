@@ -10,6 +10,8 @@
 
 Scene::Scene()
     : m_isInitialized(false)
+    , m_needToUpdate(true)
+    , m_angularSpeed(0)
 {
     connect(this, SIGNAL(windowChanged(QQuickWindow*)), this, SLOT(handleWindowChanged(QQuickWindow*)));
     setAcceptedMouseButtons(Qt::AllButtons);
@@ -24,6 +26,7 @@ Scene::~Scene()
 void Scene::changeSelectedColor(QColor newSelectedColor)
 {
     m_carModel.setColor(newSelectedColor);
+    m_needToUpdate = true;
 }
 
 void Scene::timerEvent(QTimerEvent*)
@@ -32,17 +35,37 @@ void Scene::timerEvent(QTimerEvent*)
         // Manage all the operations to the models
         operateModels();
 
-        // Update the OpenGL Scene.
-        window()->update();
+        if(m_needToUpdate){
+            // Update the OpenGL Scene.
+            window()->update();
+            m_needToUpdate = false;
+        }
     }
 }
 
-void Scene::mousePressEvent(QMouseEvent* /*event*/)
+void Scene::mousePressEvent(QMouseEvent* event)
 {
+    // Save mouse press position
+    m_mousePressPosition = QVector2D(event->localPos());
 }
 
-void Scene::mouseReleaseEvent(QMouseEvent* /*event*/)
+void Scene::mouseReleaseEvent(QMouseEvent* event)
 {
+    // Mouse release position - mouse press position
+    QVector2D diff = QVector2D(event->localPos()) - m_mousePressPosition;
+
+    // Rotation axis is perpendicular to the mouse position difference
+    // vector
+    QVector3D n = QVector3D(diff.y(), diff.x(), 0.0).normalized();
+
+    // Accelerate angular speed relative to the length of the mouse sweep
+    qreal acc = diff.length() / 100.0;
+
+    // Calculate new rotation axis as weighted sum
+    m_rotationAxis = (m_rotationAxis * m_angularSpeed + n * acc).normalized();
+
+    // Increase angular speed
+    m_angularSpeed += acc;
 }
 
 void Scene::handleWindowChanged(QQuickWindow *window)
@@ -89,16 +112,23 @@ void Scene::initializeModels()
     m_carModel.initGeometry();
     m_carModel.initTextures();
     m_carModel.createShaderProgram();
-    m_carModel.moveZ(-5);
-//    m_carModel.moveY(-1);
-    m_carModel.rotateX(45);
-//    m_carModel.rotateY(60);
-//    m_carModel.rotateZ(60);
+    m_carModel.moveZ(-3.5);
 }
 
 void Scene::operateModels()
 {
-    m_carModel.rotateY(1);
+    // Decrease angular speed (friction)
+    m_angularSpeed *= 0.99;
+
+    // Stop rotation when speed goes below threshold
+    if (m_angularSpeed < 0.01) {
+        m_angularSpeed = 0.0;
+    } else {
+        // Update rotation
+        m_rotation = QQuaternion::fromAxisAndAngle(m_rotationAxis, m_angularSpeed) * m_rotation;
+        m_carModel.setRotation(m_rotation);
+        m_needToUpdate = true;
+    }
 }
 
 void Scene::drawAllObjects()
@@ -110,6 +140,8 @@ void Scene::drawAllObjects()
     glEnable(GL_DEPTH_TEST);
     // Enable back face culling
     glEnable(GL_CULL_FACE);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
     glScissor(m_viewPortPosition.x(), m_viewPortPosition.y(), m_viewPortSize.width(), m_viewPortSize.height());
     // Clear color and depth buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -118,5 +150,5 @@ void Scene::drawAllObjects()
         // Draw all models inside the Scene.
         m_carModel.drawGeometry(m_projectionMatrix);
     }
-//    glDisable(GL_SCISSOR_TEST);
+    glDisable(GL_SCISSOR_TEST);
 }

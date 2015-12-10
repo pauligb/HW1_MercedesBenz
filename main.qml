@@ -6,43 +6,25 @@ Window {
     visible: true
     width: 640
     height: 480
+    property int colorsPaletteHeight: (width > height ) ? height / 8 : width / 8;
 
     Rectangle{
         anchors.fill: parent
-        color: "white"
+        color: "black"
     }
 
     Scene{
+        id: openglScene
         objectName: "OpenglScene"
         width: parent.width
-        height: parent.height / 2
+        height: parent.height * 2 / 3
         anchors.centerIn: parent
     }
 
     ColorsPalette{
         objectName: "MainColorsPalette"
-        height: parent.width / 10
+        height: colorsPaletteHeight
         width: parent.width
-    }
-
-    Image{
-        anchors.left: parent.left
-        anchors.bottom: parent.bottom
-
-        width: parent.width / 10
-        height: width
-        anchors.margins: width / 6
-        source: "images/btnRightArrow.png";
-        mirror: true
-    }
-
-    Image{
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-
-        width: parent.width / 10
-        height: width
-        anchors.margins: width / 6
-        source: "Textures/uvs_carros.jpg";
+        anchors.top: openglScene.bottom
     }
 }

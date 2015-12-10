@@ -23,11 +23,6 @@ CarModel::~CarModel()
     m_uvBuffer.destroy();
 }
 
-void CarModel::setColor(QColor color)
-{
-    m_carColor = color;
-}
-
 void CarModel::initGeometry()
 {
     m_verticesBuffer.create();
@@ -112,6 +107,16 @@ void CarModel::loadModel(const QString& /*path*/)
 
 }
 
+void CarModel::setColor(QColor color)
+{
+    m_carColor = color;
+}
+
+void CarModel::setRotation(const QQuaternion angle)
+{
+    m_rotation = angle;
+}
+
 void CarModel::rotateX(double angle)
 {
     m_rotation = QQuaternion::fromAxisAndAngle(1, 0, 0, angle) * m_rotation;
@@ -166,7 +171,7 @@ void CarModel::drawGeometry(QMatrix4x4  projectionMatrix)
     QVector4D carColorVector(m_carColor.redF(), m_carColor.greenF(), m_carColor.blueF(), 1);
     m_shaderProgram->setUniformValue("colorToPaint", carColorVector);
 
-    // Tell OpenGL which VBOs to use
+    // Te ll OpenGL which VBOs to use
     m_verticesBuffer.bind();
     m_indexBuffer.bind();
 

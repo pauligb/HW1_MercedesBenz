@@ -11,7 +11,6 @@
 #include <QOpenGLShaderProgram>
 #include <QOpenGLBuffer>
 #include <QOpenGLTexture>
-#include <QColor>
 
 class CarModel : public Model3DInterface
 {
@@ -20,22 +19,23 @@ public:
     CarModel();
     ~CarModel();
 
-
-    void setColor(QColor color);
-
-
     virtual void loadModel(const QString& path);
 
-    // The angle must be in degrees.
-    virtual void rotateX(double angle);
-    // The angle must be in degrees.
-    virtual void rotateY(double angle);
-    // The angle must be in degrees.
-    virtual void rotateZ(double angle);
+    // Set a specific color for the model
+    virtual void setColor(const QColor color);
 
-    virtual void moveX(double distance);
-    virtual void moveY(double distance);
-    virtual void moveZ(double distance);
+    // Set a specific rotation position
+    virtual void setRotation(const QQuaternion angle);
+    // The angle must be in degrees.
+    virtual void rotateX(const double angle);
+    // The angle must be in degrees.
+    virtual void rotateY(const double angle);
+    // The angle must be in degrees.
+    virtual void rotateZ(const double angle);
+
+    virtual void moveX(const double distance);
+    virtual void moveY(const double distance);
+    virtual void moveZ(const double distance);
 
     // This function creates the geometry of the model,
     // it must be called after creating OpenGL context and before drawing.
@@ -49,13 +49,14 @@ public:
     // it must be called after creating OpenGL context and before drawing.
     virtual void createShaderProgram();
 
-    virtual void drawGeometry(QMatrix4x4 projectionMatrix);
+    virtual void drawGeometry(const QMatrix4x4 projectionMatrix);
 
 private:
     // The next variables are related to the CarObject, not to the CarModel.
     QColor m_carColor;
 
-    //The next variables are related to the CarModel
+    // The next variables are related to the CarModel (only the texture Id)
+    // All textures should be handled in a TexturesManager.
     QOpenGLShaderProgram *m_shaderProgram;
     QOpenGLTexture *m_texture;
     QOpenGLTexture *m_mainColorMask;
