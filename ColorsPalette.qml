@@ -1,6 +1,9 @@
 import QtQuick 2.0
 
 Item {
+    id: colorsPalette
+    // The selected color functionality should be handled in a ColorsPaletteModel class
+    property int selectedColor: 0 // This means red
     property int numberOfColors: 3;
     property int coloritemHeight: height
     property int colorItemWidth: width / numberOfColors
@@ -19,17 +22,27 @@ Item {
         Item{
             height: coloritemHeight
             width: colorItemWidth
-            Rectangle {
-                id: colorObj
+            Rectangle{
                 height: parent.height
                 width: height
                 anchors.centerIn: parent
-                color: colorName
                 radius: width / 2
-            }
-            MouseArea{
-                anchors.fill: colorObj
-                onClicked: sgn_selectedColorChanged(colorObj.color);
+                color: (index == selectedColor) ? "white" : "black";
+                Rectangle {
+                    id: colorObj
+                    height: parent.height * 9 / 10
+                    width: height
+                    anchors.centerIn: parent
+                    color: colorName
+                    radius: width / 2
+                }
+                MouseArea{
+                    anchors.fill: colorObj
+                    onClicked: {
+                        sgn_selectedColorChanged(colorObj.color);
+                        selectedColor = index;
+                    }
+                }
             }
         }
     }
