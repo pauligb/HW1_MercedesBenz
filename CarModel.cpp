@@ -13,6 +13,7 @@ CarModel::CarModel()
     : m_carColor(Qt::red)
     , m_shaderProgram(NULL)
     , m_indexBuffer(QOpenGLBuffer::IndexBuffer)
+    , m_scale(1.0)
 {
 }
 
@@ -23,47 +24,13 @@ CarModel::~CarModel()
     m_uvBuffer.destroy();
 }
 
-void CarModel::initGeometry()
-{
-    m_verticesBuffer.create();
-    m_indexBuffer.create();
-    m_uvBuffer.create();
-
-    ModelLoader modelLoader;
-
-    QVector<QVector3D> tempVertices;
-    QVector<QVector2D> tempUVs;
-    QVector<QVector3D> tempNormals;
-    QVector<GLushort> tempIndices;
-    modelLoader.loadObj(":Models/Woman1.obj", tempVertices, tempUVs, tempNormals);
-
-    for(int i = 0; i< tempVertices.size();i++)
-    {
-        tempIndices.append(i);
-    }
-
-    // Transfer vertex data to VBO 0
-    m_verticesBuffer.bind();
-    qDebug()<<"tempVertices.size()"<<tempVertices.size();
-    m_verticesBuffer.allocate(&tempVertices.at(0), tempVertices.size() * sizeof(QVector3D));
-    qDebug()<<"m_verticesBuffer.size()"<<m_verticesBuffer.size();
-
-    // Transfer index data to VBO 1
-    m_indexBuffer.bind();
-    m_indexBuffer.allocate(&tempIndices.at(0),  tempIndices.size() * sizeof(GLushort));
-
-    // Transfer index data to VBO 2
-    m_uvBuffer.bind();
-    m_uvBuffer.allocate(&tempUVs.at(0), tempUVs.size() * sizeof(QVector2D));
-}
-
 void CarModel::initTextures()
 {
     glActiveTexture(GL_TEXTURE0);
     glEnable(GL_TEXTURE_2D);
     // Load cube.png image
 
-    m_texture = new QOpenGLTexture(QImage(":Textures/sarah_color.tga"));
+    m_texture = new QOpenGLTexture(QImage(":Textures/Lexus.jpg").mirrored());
 
     // Set nearest filtering mode for texture minification
     m_texture->setMinificationFilter(QOpenGLTexture::Nearest);
@@ -78,7 +45,7 @@ void CarModel::initTextures()
 
     glActiveTexture(GL_TEXTURE1);
     // Load cube.png image
-    m_mainColorMask = new QOpenGLTexture(QImage(":Textures/cubeCars_mask.png"));
+    m_mainColorMask = new QOpenGLTexture(QImage(":Textures/Lexus_mask.jpg").mirrored());
 
     // Set nearest filtering mode for texture minification
     m_mainColorMask->setMinificationFilter(QOpenGLTexture::Nearest);
@@ -102,14 +69,49 @@ void CarModel::createShaderProgram()
     }
 }
 
-void CarModel::loadModel(const QString& /*path*/)
+void CarModel::loadModel(const QString& model)
 {
+    m_verticesBuffer.create();
+    m_indexBuffer.create();
+    m_uvBuffer.create();
 
+    QVector<QVector3D> tempVertices;
+    QVector<QVector2D> tempUVs;
+    QVector<QVector3D> tempNormals;
+    QVector<GLushort> tempIndices;
+
+    ModelLoader::loadObj(model, tempVertices, tempUVs, tempNormals);
+
+    for(int i = 0; i< tempVertices.size();i++)
+    {
+        tempIndices.append(i);
+    }
+
+    // Transfer vertex data to VBO 0
+    m_verticesBuffer.bind();
+    qDebug()<<"tempVertices.size()"<<tempVertices.size();
+    m_verticesBuffer.allocate(&tempVertices.at(0), tempVertices.size() * sizeof(QVector3D));
+    qDebug()<<"m_verticesBuffer.size()"<<m_verticesBuffer.size();
+
+    // Transfer index data to VBO 1
+    m_indexBuffer.bind();
+    m_indexBuffer.allocate(&tempIndices.at(0),  tempIndices.size() * sizeof(GLushort));
+
+    // Transfer index data to VBO 2
+    m_uvBuffer.bind();
+    m_uvBuffer.allocate(&tempUVs.at(0), tempUVs.size() * sizeof(QVector2D));
 }
 
 void CarModel::setColor(QColor color)
 {
     m_carColor = color;
+}
+
+void CarModel::setScale(const float scale)
+{
+    if(0 < scale){
+        m_scale = scale;
+    }
 }
 
 void CarModel::setRotation(const QQuaternion angle)
@@ -155,9 +157,9 @@ void CarModel::drawGeometry(QMatrix4x4  projectionMatrix)
     QMatrix4x4 matrix;
     matrix.translate(m_positionDistance);
     matrix.rotate(m_rotation);
+    matrix.scale(m_scale);
 
     // Set modelview-projection matrix
-
     m_shaderProgram->setUniformValue("mvp_matrix", projectionMatrix * matrix);
 
     //Binding to texture 0
@@ -168,6 +170,7 @@ void CarModel::drawGeometry(QMatrix4x4  projectionMatrix)
     m_mainColorMask->bind();
     m_shaderProgram->setUniformValue("mainColorMask", 1);
 
+    // Display the car in the desired color
     QVector4D carColorVector(m_carColor.redF(), m_carColor.greenF(), m_carColor.blueF(), 1);
     m_shaderProgram->setUniformValue("colorToPaint", carColorVector);
 

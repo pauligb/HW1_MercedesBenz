@@ -24,7 +24,7 @@ public:
 
     ModelLoader();
 
-    bool loadObj(const QString &path, QVector<QVector3D> &out_vertices, QVector<QVector2D> &out_uvs, QVector<QVector3D> &out_normals);
+    static bool loadObj(const QString &path, QVector<QVector3D> &out_vertices, QVector<QVector2D> &out_uvs, QVector<QVector3D> &out_normals);
 };
 
 #endif // MODEL_LOADER_H

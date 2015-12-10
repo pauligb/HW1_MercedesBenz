@@ -19,11 +19,14 @@ public:
     CarModel();
     ~CarModel();
 
-    virtual void loadModel(const QString& path);
+    // This function creates the geometry of the model,
+    // it must be called after creating OpenGL context and before drawing.
+    virtual void loadModel(const QString& model);
 
     // Set a specific color for the model
     virtual void setColor(const QColor color);
-
+    // Set a specific scale for the model ((0-1] range)
+    virtual void setScale(const float scale);
     // Set a specific rotation position
     virtual void setRotation(const QQuaternion angle);
     // The angle must be in degrees.
@@ -39,16 +42,13 @@ public:
 
     // This function creates the geometry of the model,
     // it must be called after creating OpenGL context and before drawing.
-    virtual void initGeometry();
-
-    // This function creates the geometry of the model,
-    // it must be called after creating OpenGL context and before drawing.
     virtual void initTextures();
 
     // This function creates the geometry of the model,
     // it must be called after creating OpenGL context and before drawing.
     virtual void createShaderProgram();
 
+    // Draw the model in the scene
     virtual void drawGeometry(const QMatrix4x4 projectionMatrix);
 
 private:
@@ -73,6 +73,8 @@ private:
     QVector3D m_rotationAngle;
     // The next variable is the rotation Quaternion.
     QQuaternion m_rotation;
+    // The next variable is use to scale the model ((0-1] range)
+    float m_scale;
     // The next variable is used localy to rotate the object (Perhaps will be removed).
     QVector3D m_rotationAxis;
 };

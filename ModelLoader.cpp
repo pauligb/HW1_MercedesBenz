@@ -41,7 +41,7 @@ bool ModelLoader::loadObj(const QString& path,
     float y = 0;
     float z = 0;
     while (!line.isNull()) {
-        QStringList values = line.split(" ");
+        QStringList values = line.split(QRegExp("\\s+"));
         QString firstValue = values.at(0);
 
         if(0 == firstValue.compare("v"))

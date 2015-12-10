@@ -19,5 +19,6 @@ void main()
     else
     {
         gl_FragColor = colorToPaint;
+//        gl_FragColor = texture2D(texture, v_texcoord);
     }
 }

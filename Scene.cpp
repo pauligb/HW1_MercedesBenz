@@ -109,10 +109,11 @@ void Scene::sync()
 
 void Scene::initializeModels()
 {
-    m_carModel.initGeometry();
+    m_carModel.loadModel(":Models/Lexus.obj");
     m_carModel.initTextures();
     m_carModel.createShaderProgram();
-    m_carModel.moveZ(-3.5);
+    m_carModel.moveZ(-20);
+    m_carModel.setScale(0.25);
 }
 
 void Scene::operateModels()

@@ -9,5 +9,7 @@
         <file>Textures/uvs_carros.jpg</file>
         <file>Textures/cubeCars_mask.png</file>
         <file>Textures/cubeCars.png</file>
+        <file>Textures/Lexus_mask.jpg</file>
+        <file>Textures/Lexus.jpg</file>
     </qresource>
 </RCC>
