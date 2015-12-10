@@ -51,6 +51,7 @@ public:
 private:
     QOpenGLShaderProgram *m_shaderProgram;
     QOpenGLTexture *m_texture;
+    QOpenGLTexture *m_mainColorMask;
 
     QOpenGLBuffer m_verticesBuffer;
     QOpenGLBuffer m_uvBuffer;

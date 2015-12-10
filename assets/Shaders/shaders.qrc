@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>VertexShaders/Normal.vert</file>
         <file>FragmentShaders/Normal.frag</file>
+        <file>FragmentShaders/ChangeColor.frag</file>
     </qresource>
 </RCC>

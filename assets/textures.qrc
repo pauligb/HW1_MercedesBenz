@@ -4,5 +4,6 @@
         <file>Textures/betty_color.tga</file>
         <file>Textures/sarah_color.tga</file>
         <file>Textures/Bus.tga</file>
+        <file>Textures/cube_mask_greenColor.png</file>
     </qresource>
 </RCC>

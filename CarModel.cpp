@@ -34,7 +34,7 @@ void CarModel::initGeometry()
     QVector<QVector2D> tempUVs;
     QVector<QVector3D> tempNormals;
     QVector<GLushort> tempIndices;
-    modelLoader.loadObj(":Models/Woman1.obj", tempVertices, tempUVs, tempNormals);
+    modelLoader.loadObj(":Models/cube.obj", tempVertices, tempUVs, tempNormals);
 
     for(int i = 0; i< tempVertices.size();i++)
     {
@@ -58,8 +58,11 @@ void CarModel::initGeometry()
 
 void CarModel::initTextures()
 {
+    glActiveTexture(GL_TEXTURE0);
+    glEnable(GL_TEXTURE_2D);
     // Load cube.png image
-    m_texture = new QOpenGLTexture(QImage(":Textures/sarah_color.tga"));
+
+    m_texture = new QOpenGLTexture(QImage(":Textures/cube.png"));
 
     // Set nearest filtering mode for texture minification
     m_texture->setMinificationFilter(QOpenGLTexture::Nearest);
@@ -70,6 +73,23 @@ void CarModel::initTextures()
     // Wrap texture coordinates by repeating
     // f.ex. texture coordinate (1.1, 1.2) is same as (0.1, 0.2)
     m_texture->setWrapMode(QOpenGLTexture::Repeat);
+    m_texture->bind();
+
+
+    glActiveTexture(GL_TEXTURE1);
+    // Load cube.png image
+    m_mainColorMask = new QOpenGLTexture(QImage(":Textures/cube_mask_greenColor.png"));
+
+    // Set nearest filtering mode for texture minification
+    m_mainColorMask->setMinificationFilter(QOpenGLTexture::Nearest);
+
+    // Set bilinear filtering mode for texture magnification
+    m_mainColorMask->setMagnificationFilter(QOpenGLTexture::Linear);
+
+    // Wrap texture coordinates by repeating
+    // f.ex. texture coordinate (1.1, 1.2) is same as (0.1, 0.2)
+    m_mainColorMask->setWrapMode(QOpenGLTexture::Repeat);
+    m_mainColorMask->bind();
 }
 
 void CarModel::createShaderProgram()
@@ -77,7 +97,7 @@ void CarModel::createShaderProgram()
     if (!m_shaderProgram) {
         m_shaderProgram = new QOpenGLShaderProgram();
         m_shaderProgram->addShaderFromSourceFile(QOpenGLShader::Vertex, ":VertexShaders/Normal.vert");
-        m_shaderProgram->addShaderFromSourceFile(QOpenGLShader::Fragment, ":FragmentShaders/Normal.frag");
+        m_shaderProgram->addShaderFromSourceFile(QOpenGLShader::Fragment, ":FragmentShaders/ChangeColor.frag");
         m_shaderProgram->link();
     }
 }
@@ -127,12 +147,16 @@ void CarModel::drawGeometry(QMatrix4x4  projectionMatrix)
     matrix.rotate(m_rotation);
 
     // Set modelview-projection matrix
+
     m_shaderProgram->setUniformValue("mvp_matrix", projectionMatrix * matrix);
 
+    //Binding to texture 0
     m_texture->bind();
-    // Use texture unit 0 which contains cube.png
-    int textureLocation = m_shaderProgram->uniformLocation("texture");
-    m_shaderProgram->setUniformValue("texture", textureLocation);
+    m_shaderProgram->setUniformValue("texture", 0);
+
+    //Binding to texture 1
+    m_mainColorMask->bind();
+    m_shaderProgram->setUniformValue("mainColorMask", 1);
 
     // Tell OpenGL which VBOs to use
     m_verticesBuffer.bind();
@@ -152,6 +176,7 @@ void CarModel::drawGeometry(QMatrix4x4  projectionMatrix)
     m_shaderProgram->enableAttributeArray(texcoordLocation);
     m_shaderProgram->setAttributeBuffer(texcoordLocation, GL_FLOAT, offset, 2, sizeof(QVector2D));
 
+    m_indexBuffer.bind();
     // Draw cube geometry using indices from VBO 1
     glDrawElements(GL_TRIANGLES, m_indexBuffer.size()/sizeof(GLushort), GL_UNSIGNED_SHORT, 0);
 }
