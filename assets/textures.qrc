@@ -5,5 +5,9 @@
         <file>Textures/sarah_color.tga</file>
         <file>Textures/Bus.tga</file>
         <file>Textures/cube_mask_greenColor.png</file>
+        <file>Models/cubo_carros.obj</file>
+        <file>Textures/uvs_carros.jpg</file>
+        <file>Textures/cubeCars_mask.png</file>
+        <file>Textures/cubeCars.png</file>
     </qresource>
 </RCC>

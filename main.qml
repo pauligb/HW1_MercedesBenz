@@ -13,13 +13,14 @@ Window {
     }
 
     Scene{
-        id: openglScene
+        objectName: "OpenglScene"
         width: parent.width
-        height: parent.height
-//        anchors.centerIn: parent
+        height: parent.height / 2
+        anchors.centerIn: parent
     }
 
     ColorsPalette{
+        objectName: "MainColorsPalette"
         height: parent.width / 10
         width: parent.width
     }
@@ -42,6 +43,6 @@ Window {
         width: parent.width / 10
         height: width
         anchors.margins: width / 6
-        source: "images/btnRightArrow.png";
+        source: "Textures/uvs_carros.jpg";
     }
 }

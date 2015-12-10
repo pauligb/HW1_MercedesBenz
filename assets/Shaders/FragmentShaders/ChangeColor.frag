@@ -6,7 +6,7 @@ precision mediump float;
 
 uniform sampler2D texture;
 uniform sampler2D mainColorMask;
-
+uniform vec4 colorToPaint;
 varying vec2 v_texcoord;
 
 void main()
@@ -18,6 +18,6 @@ void main()
     }
     else
     {
-        gl_FragColor = vec4(1, 0, 0, 1);
+        gl_FragColor = colorToPaint;
     }
 }

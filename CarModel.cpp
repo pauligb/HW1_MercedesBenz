@@ -10,7 +10,8 @@
 #include <QVector2D>
 
 CarModel::CarModel()
-    : m_shaderProgram(NULL)
+    : m_carColor(Qt::red)
+    , m_shaderProgram(NULL)
     , m_indexBuffer(QOpenGLBuffer::IndexBuffer)
 {
 }
@@ -20,6 +21,11 @@ CarModel::~CarModel()
     m_verticesBuffer.destroy();
     m_indexBuffer.destroy();
     m_uvBuffer.destroy();
+}
+
+void CarModel::setColor(QColor color)
+{
+    m_carColor = color;
 }
 
 void CarModel::initGeometry()
@@ -62,7 +68,7 @@ void CarModel::initTextures()
     glEnable(GL_TEXTURE_2D);
     // Load cube.png image
 
-    m_texture = new QOpenGLTexture(QImage(":Textures/cube.png"));
+    m_texture = new QOpenGLTexture(QImage(":Textures/cubeCars.png"));
 
     // Set nearest filtering mode for texture minification
     m_texture->setMinificationFilter(QOpenGLTexture::Nearest);
@@ -75,10 +81,9 @@ void CarModel::initTextures()
     m_texture->setWrapMode(QOpenGLTexture::Repeat);
     m_texture->bind();
 
-
     glActiveTexture(GL_TEXTURE1);
     // Load cube.png image
-    m_mainColorMask = new QOpenGLTexture(QImage(":Textures/cube_mask_greenColor.png"));
+    m_mainColorMask = new QOpenGLTexture(QImage(":Textures/cubeCars_mask.png"));
 
     // Set nearest filtering mode for texture minification
     m_mainColorMask->setMinificationFilter(QOpenGLTexture::Nearest);
@@ -157,6 +162,9 @@ void CarModel::drawGeometry(QMatrix4x4  projectionMatrix)
     //Binding to texture 1
     m_mainColorMask->bind();
     m_shaderProgram->setUniformValue("mainColorMask", 1);
+
+    QVector4D carColorVector(m_carColor.redF(), m_carColor.greenF(), m_carColor.blueF(), 1);
+    m_shaderProgram->setUniformValue("colorToPaint", carColorVector);
 
     // Tell OpenGL which VBOs to use
     m_verticesBuffer.bind();

@@ -6,6 +6,7 @@
 
 #include "Scene.h"
 #include <QQuickWindow>
+#include <QDebug>
 
 Scene::Scene()
     : m_isInitialized(false)
@@ -18,6 +19,11 @@ Scene::Scene()
 Scene::~Scene()
 {
     m_BasicTimer.stop();
+}
+
+void Scene::changeSelectedColor(QColor newSelectedColor)
+{
+    m_carModel.setColor(newSelectedColor);
 }
 
 void Scene::timerEvent(QTimerEvent*)
@@ -85,7 +91,7 @@ void Scene::initializeModels()
     m_carModel.createShaderProgram();
     m_carModel.moveZ(-5);
 //    m_carModel.moveY(-1);
-    m_carModel.rotateX(20);
+    m_carModel.rotateX(45);
 //    m_carModel.rotateY(60);
 //    m_carModel.rotateZ(60);
 }
@@ -98,7 +104,7 @@ void Scene::operateModels()
 void Scene::drawAllObjects()
 {
     glViewport(m_viewPortPosition.x(), m_viewPortPosition.y(), m_viewPortSize.width(), m_viewPortSize.height());
-//    glEnable(GL_SCISSOR_TEST);
+    glEnable(GL_SCISSOR_TEST);
     glClearColor(0, 0, 0, 1);
     // Enable depth buffer
     glEnable(GL_DEPTH_TEST);

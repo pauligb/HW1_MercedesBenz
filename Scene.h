@@ -11,6 +11,7 @@
 #include <QQuickItem>
 #include <QOpenGLFunctions>
 #include <QBasicTimer>
+#include <QColor>
 
 class Scene : public QQuickItem, public QOpenGLFunctions
 {
@@ -18,6 +19,9 @@ class Scene : public QQuickItem, public QOpenGLFunctions
 public:
     Scene();
     ~Scene();
+
+public slots:
+    void changeSelectedColor(QColor newSelectedColor);
 
 protected:
     void timerEvent(QTimerEvent* timer);

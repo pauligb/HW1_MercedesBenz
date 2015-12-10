@@ -11,6 +11,7 @@
 #include <QOpenGLShaderProgram>
 #include <QOpenGLBuffer>
 #include <QOpenGLTexture>
+#include <QColor>
 
 class CarModel : public Model3DInterface
 {
@@ -18,7 +19,9 @@ class CarModel : public Model3DInterface
 public:
     CarModel();
     ~CarModel();
-    // PGB TODO: This function will be changed to setShaderProgram.
+
+
+    void setColor(QColor color);
 
 
     virtual void loadModel(const QString& path);
@@ -49,6 +52,10 @@ public:
     virtual void drawGeometry(QMatrix4x4 projectionMatrix);
 
 private:
+    // The next variables are related to the CarObject, not to the CarModel.
+    QColor m_carColor;
+
+    //The next variables are related to the CarModel
     QOpenGLShaderProgram *m_shaderProgram;
     QOpenGLTexture *m_texture;
     QOpenGLTexture *m_mainColorMask;
@@ -63,10 +70,8 @@ private:
     QVector3D m_positionDistance;
     // The next variable contains the rotation angle in x, y and z.
     QVector3D m_rotationAngle;
-
     // The next variable is the rotation Quaternion.
     QQuaternion m_rotation;
-
     // The next variable is used localy to rotate the object (Perhaps will be removed).
     QVector3D m_rotationAxis;
 };

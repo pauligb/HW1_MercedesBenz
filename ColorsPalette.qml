@@ -4,7 +4,7 @@ Item {
     property int numberOfColors: 3;
     property int coloritemHeight: height
     property int colorItemWidth: width / numberOfColors
-    signal colorClicked(variant colorIndex)
+    signal sgn_selectedColorChanged(color newColor)
 
     ListModel {
         id: myModel
@@ -29,7 +29,7 @@ Item {
             }
             MouseArea{
                 anchors.fill: colorObj
-                onClicked: colorClicked(colorIndex);
+                onClicked: sgn_selectedColorChanged(colorObj.color);
             }
         }
     }

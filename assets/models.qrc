@@ -4,5 +4,6 @@
         <file>Models/Woman1.obj</file>
         <file>Models/Woman2.obj</file>
         <file>Models/bus.obj</file>
+        <file>Models/cubo_carros.obj</file>
     </qresource>
 </RCC>
