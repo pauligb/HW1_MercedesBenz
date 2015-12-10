@@ -35,7 +35,7 @@ void CarModel::initGeometry()
     QVector<QVector2D> tempUVs;
     QVector<QVector3D> tempNormals;
     QVector<GLushort> tempIndices;
-    modelLoader.loadObj(":Models/cube.obj", tempVertices, tempUVs, tempNormals);
+    modelLoader.loadObj(":Models/Woman1.obj", tempVertices, tempUVs, tempNormals);
 
     for(int i = 0; i< tempVertices.size();i++)
     {
@@ -63,7 +63,7 @@ void CarModel::initTextures()
     glEnable(GL_TEXTURE_2D);
     // Load cube.png image
 
-    m_texture = new QOpenGLTexture(QImage(":Textures/cubeCars.png"));
+    m_texture = new QOpenGLTexture(QImage(":Textures/sarah_color.tga"));
 
     // Set nearest filtering mode for texture minification
     m_texture->setMinificationFilter(QOpenGLTexture::Nearest);
