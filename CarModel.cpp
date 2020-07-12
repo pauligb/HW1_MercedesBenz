@@ -26,6 +26,7 @@ CarModel::~CarModel()
 
 void CarModel::initTextures()
 {
+    initializeOpenGLFunctions();
     glActiveTexture(GL_TEXTURE0);
     glEnable(GL_TEXTURE_2D);
     // Load cube.png image

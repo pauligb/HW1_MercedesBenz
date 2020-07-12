@@ -11,8 +11,9 @@
 #include <QOpenGLShaderProgram>
 #include <QOpenGLBuffer>
 #include <QOpenGLTexture>
+#include <QOpenGLFunctions>
 
-class CarModel : public Model3DInterface
+class CarModel : public Model3DInterface, public QOpenGLFunctions
 {
     Q_OBJECT
 public:
